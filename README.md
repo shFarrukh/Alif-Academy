@@ -1,8 +1,8 @@
 # Alif-Academy
-1. Intro \n
-2.Go language basics \n
-3.Build, builtin, packages 
-4.Function, conditions
-5.Scopes, Functions, Examples
-6.Data typers, Stuctures 
-7.
+:white_check_mark: Intro \n
+:white_check_mark: Go language basics \n
+:white_check_mark:Build, builtin, packages 
+:white_check_mark:Function, conditions
+:white_check_mark: Scopes, Functions, Examples
+:white_check_mark: Data typers, Stuctures 
+
