@@ -1,7 +1,13 @@
 package wallet
 
-import "testing"
+import (
+	"log"
+	"testing"
 
+	"github.com/shFarrukh/wallet/pkg/types"
+)
+
+/*
 func TestService_FindAccoundById_Method_NotFound(t *testing.T) {
 	svc := Service{}
 	svc.RegisterAccount("+9920000001")
@@ -146,3 +152,124 @@ func TestService_FavoritePayment_success_user(t *testing.T) {
 		t.Errorf("method PayFromFavorite returned nil, paymentFavorite(%v)", paymentFavorite)
 	}
 }
+*/
+/////
+func BenchmarkSumPayment(b *testing.B){
+	var svc Service
+	
+	account, err := svc.RegisterAccount("+992000000001")
+	
+	if err != nil {
+	b.Errorf("method RegisterAccount returned not nil error, account => %v", account)
+	}
+	
+	err = svc.Deposit(account.ID, 100_00)
+	if err != nil {
+	b.Errorf("method Deposit returned not nil error, error => %v", err)
+	}
+	
+	_, err = svc.Pay(account.ID, 1, "Cafe")
+	_, err = svc.Pay(account.ID, 2, "Cafe")
+	_, err = svc.Pay(account.ID, 3, "Cafe")
+	_, err = svc.Pay(account.ID, 4, "Cafe")
+	_, err = svc.Pay(account.ID, 5, "Cafe")
+	_, err = svc.Pay(account.ID, 6, "Cafe")
+	_, err = svc.Pay(account.ID, 7, "Cafe")
+	_, err = svc.Pay(account.ID, 8, "Cafe")
+	_, err = svc.Pay(account.ID, 9, "Cafe")
+	_, err = svc.Pay(account.ID, 10, "Cafe")
+	_, err = svc.Pay(account.ID, 11, "Cafe")
+	if err != nil {
+	b.Errorf("method Pay returned not nil error, err => %v", err)
+	}
+	
+	want := types.Money(66)
+	
+	got := svc.SumPayments(2)
+	if want != got{
+	b.Errorf(" error, want => %v got => %v", want, got)
+	}
+	}
+	
+	func BenchmarkFilterPayments(b *testing.B) {
+	svc := &Service{}
+	
+	account, err := svc.RegisterAccount("+992000000000")
+	account1, err := svc.RegisterAccount("+992000000001")
+	account2, err := svc.RegisterAccount("+992000000002")
+	account3, err := svc.RegisterAccount("+992000000003")
+	account4, err := svc.RegisterAccount("+992000000004")
+	acc, err := svc.RegisterAccount("+992000000005")
+	if err != nil {
+	}
+	svc.Deposit(acc.ID, 100)
+	err = svc.Deposit(account.ID, 100_00)
+	if err != nil {
+	}
+	
+	svc.Pay(account.ID, 10_00, "auto")
+	svc.Pay(account.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account2.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account3.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account3.ID, 10_00, "auto")
+	svc.Pay(account2.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	
+	a, err := svc.FilterPayments(account.ID, 5)
+	if err != nil {
+	b.Error(err)
+	}
+	log.Println(len(a))
+	}
+	
+	func BenchmarkService_FilterPaymentsByFn(b *testing.B) {
+	svc := &Service{}
+	filter := func(payment types.Payment) bool {
+	for _, value := range svc.payments {
+	if payment.ID == value.ID {
+	return true
+	}
+	}
+	return false
+	}
+	account, err := svc.RegisterAccount("+992000000000")
+	account1, err := svc.RegisterAccount("+992000000001")
+	account2, err := svc.RegisterAccount("+992000000002")
+	account3, err := svc.RegisterAccount("+992000000003")
+	account4, err := svc.RegisterAccount("+992000000004")
+	acc, err := svc.RegisterAccount("+992000000005")
+	if err != nil {
+	}
+	svc.Deposit(acc.ID, 100)
+	err = svc.Deposit(account.ID, 100_00)
+	if err != nil {
+	}
+	
+	svc.Pay(account.ID, 10_00, "auto")
+	svc.Pay(account.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account2.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account3.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	svc.Pay(account1.ID, 10_00, "auto")
+	svc.Pay(account3.ID, 10_00, "auto")
+	svc.Pay(account2.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	svc.Pay(account4.ID, 10_00, "auto")
+	a, err := svc.FilterPaymentsByFn(filter, 4)
+	if err != nil {
+	b.Error(err)
+	}
+	log.Println(a)
+	}
+	
