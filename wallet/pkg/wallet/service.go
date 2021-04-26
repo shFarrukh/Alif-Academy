@@ -99,7 +99,7 @@ func (s *Service) Pay(accountID int64, amount types.Money, category types.Paymen
 	s.payments = append(s.payments, payment)
 	return payment, nil
 }
-/*
+
 func (s *Service) FindAccountByID(accountID int64) (*types.Account, error) {
 	var account *types.Account
 	for _, accounts := range s.accounts {
@@ -155,7 +155,7 @@ func (s *Service) Repeat(paymentID string) (*types.Payment, error) {
 	}
 
 	return payment, err
-}*/
+}
 
 type testServiceUser struct {
 	*Service
@@ -164,7 +164,7 @@ type testServiceUser struct {
 func newTestServiceUser() *testServiceUser {
 	return &testServiceUser{Service: &Service{}}
 }
-/*
+
 func (s *Service) FavoritePayment(paymentID string, name string) (*types.Favorite, error) {
 	pay, err := s.FindPaymentByID(paymentID)
 	if err != nil {
@@ -206,7 +206,7 @@ func (s *Service) PayFromFavorite(favoriteID string) (*types.Payment, error) {
 
 	return pay, nil
 }
-*/
+
 func (s *Service) ExportToFile(path string) error {
 	file, err := os.Create(path)
 	if err != nil {
